@@ -1,6 +1,6 @@
 ## Interface: 80300
 ## Author: cqwrteur
 ## Title: cnbnpoints
-
+## OptionalDeps: Ace3
 
 Init.lua
