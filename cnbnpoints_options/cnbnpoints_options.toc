@@ -1,0 +1,8 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: cnbnpoints options
+## Dependencies: cnbnpoints
+## LoadOnDemand: 1
+## SavedVariables: cnbnpoints_db
+
+cbpo.lua
