@@ -2,10 +2,10 @@ local RIO = LibStub:NewLibrary("LibRaiderIO",3)
 if not RIO then return end
 RIO.instances =
 {
+{258,2,12}, -- Ny'alotha, the Waking City
 {254,2,8}, -- The Eternal Palace
-{251,2,9}, -- Battle of Dazar'alor
 }
-RIO.dungeons = {140,137,142,144,146,138,145,143,141,139}
+RIO.dungeons = {140,137,142,144,146,138,145,143,141,139,256,257}
 
 RIO.raid_types = 7
 RIO.score_types = 4
@@ -23,7 +23,7 @@ end
 
 RIO.characters = {}
 RIO.lookups = {}
-RIO.constants = {3,2}
+--RIO.constants = {3,2}
 
 RIO.decode =
 {
@@ -40,10 +40,11 @@ function RIO.AddProvider(provider)
 	local data = provider.data
 	local db = provider.db1 or provider.db2
 	if db then
-		RIO.characters[data] = db
+		RIO.characters[data] = provider
+		provider.db = provider.db1 or provider.db2
 	else
-		local lookup = provider.lookup1 or provider.lookup2
-		RIO.lookups[data] = lookup
+		RIO.lookups[data] = provider
+		provider.lookup = provider.lookup1 or provider.lookup2
 	end
 end
 
@@ -82,7 +83,7 @@ function RIO.raw(data,player,server,pool)
 	end
 	local characters_data = RIO.characters[data]
 	if characters_data == nil then return end
-	local server_info = characters_data[server]
+	local server_info = characters_data.db[server]
 	if server_info == nil then return end
 --lower bound : https://en.cppreference.com/w/cpp/algorithm/lower_bound
 	local first,last = 2,#server_info+1
@@ -100,21 +101,28 @@ function RIO.raw(data,player,server,pool)
 	end
 --binary search : https://en.cppreference.com/w/cpp/algorithm/binary_search
 	if first~=last and server_info[first] <= player then
-		if pool then
-			wipe(pool)
-		else
-			pool = {}
+		if bucket then
+			local lookup = RIO.lookups[data]
+			if data == 1 then	-- dungeon
+				return 1 + server_info[1] + (first - 2) * lookup.recordSizeInBytes
+			else	
+				if pool then
+					wipe(pool)
+				else
+					pool = {}
+				end		
+				local constant = 2
+				local pos = server_info[1]+(first-2) * constant
+				local lkp = RIO.lookups[data].lookup
+				local size = #lkp[1]
+				local b = lkp[math.floor(pos/size)+1]
+				local s = pos%size
+				for i=1,constant do
+					pool[i] = b[s+i]
+				end
+				return pool
+			end
 		end
-		local constant = RIO.constants[data] or 1
-		local pos = server_info[1]+(first-2) * constant
-		local lkp = RIO.lookups[data]
-		local size = #lkp[1]
-		local b = lkp[math.floor(pos/size)+1]
-		local s = pos%size
-		for i=1,constant do
-			pool[i] = b[s+i]
-		end
-		return pool
 	end
 end
 
@@ -210,30 +218,104 @@ function RIO.raid_group(raw,groupID,shortName,pool)
 	return false,0,-1
 end
 
-function RIO.score_process(raw,pos,bits,approximate)
-	local lo, hi = RIO.Split64BitNumber(raw)
-	local score = RIO.ReadBits(lo,hi,pos,bits)
-	if approximate then
-		return score * approximate,approximate
+function RIO.ReadBitsFromString(str, bitOffset, totalBitsToRead)
+	local value = 0
+	local readOffset = 0
+	local firstByteShift = bitOffset % 8
+	local bytesToRead = ceil((totalBitsToRead + firstByteShift) / 8)
+	local strbyte = strbyte
+	local floor = floor
+	local band = bit.band
+	local rshift = bit.rshift
+	local lshift = bit.lshift
+	local min = min
+	while readOffset < totalBitsToRead do
+		local byte = strbyte(str, 1 + floor((bitOffset + readOffset) / 8))
+		local bitsRead = 0
+		if readOffset == 0 then
+			if bytesToRead == 1 then
+				local availableBits = totalBitsToRead - readOffset
+				value = band(rshift(byte, firstByteShift), ((lshift(1, availableBits)) - 1))
+				bitsRead = totalBitsToRead
+			else
+				value = rshift(byte, firstByteShift)
+				bitsRead = 8 - firstByteShift
+			end
+		else
+			local availableBits = totalBitsToRead - readOffset
+			if availableBits < 8 then
+				value = value + lshift(band(byte, (lshift(1, availableBits) - 1)), readOffset)
+				bitsRead = bitsRead + availableBits;
+			else
+				value = value + lshift(byte, readOffset)
+				bitsRead = bitsRead + min(8, totalBitsToRead)
+			end
+		end
+		readOffset = readOffset + bitsRead
 	end
-	return score
+
+	if readOffset ~= totalBitsToRead then
+		error('Read an improper number of bits. Expected ' .. totalBitsToRead .. ' got ' .. readOffset)
+	end
+
+	return value, bitOffset + readOffset
 end
 
+--[[
+1  12   0       CURRENT_SCORE               current season score
+2   7  12       CURRENT_ROLES               current season roles
+3  14  19       PREVIOUS_SCORE              previous season score
+4   7  33       PREVIOUS_ROLES              previous season roles
+5  12  40       MAIN_CURRENT_SCORE          main's current season score
+6   7  52       MAIN_CURRENT_ROLES          main's current season roles
+7  11  59       MAIN_PREVIOUS_SCORE         main's previous season score
+8   7  70       MAIN_PREVIOUS_ROLES         main's previous season roles
+9  24  77       DUNGEON_RUN_COUNTS          number of runs this season for 5+, 10+, 15+, and 20+
+10 84 101       DUNGEON_LEVELS              dungeon levels and stars for each dungeon completed
+11  4 185       DUNGEON_BEST_INDEX          best dungeon index
+]]
 function RIO.score(raw,index)
-	if index == 1 then
-		return RIO.score_process(raw[1],0,12)
+	local str=RIO.lookups[1].db[1]
+	local read_bits_from_str = RIO.ReadBitsFromString
+	if index==1 then
+		return read_bits_from_str(str,raw,12)
 	elseif index == 2 then
-		return RIO.score_process(raw[3],#RIO.dungeons*7 - 42,9,10)
+		return read_bits_from_str(str,raw+19,12),read_bits_from_str(str,raw+31,2)
 	elseif index == 3 then
-		return RIO.score_process(raw[1],34,12)
+		return read_bits_from_str(str,raw+40,12)
 	else
-		return RIO.score_process(raw[3],#RIO.dungeons*7 - 26,9,10)
+		return read_bits_from_str(str,raw+59,9)*10,read_bits_from_str(str,raw+68,2)
 	end
 end
 
-function RIO.role_process(raw,pos,pool)
-	local lo, hi = RIO.Split64BitNumber(raw)
-	local roles = RIO.ReadBits(lo,hi,pos,7)
+function RIO.dungeon(raw,index)
+	local base = 101+index*7 + raw		--101: DUNGEON_LEVELS
+	local str=RIO.lookups[1].db[1]
+	local read_bits_from_str = RIO.ReadBitsFromString
+	return read_bits_from_str(str,base,5),read_bits_from_str(str,base,2)
+end
+
+function RIO.DecodeBits6(value)
+	if value < 10 then
+		return value
+	end
+	return 10 + (value - 10) * 5
+end
+
+function RIO.keystone(raw,leveldiv5)
+	local value = RIO.ReadBitsFromString(RIO.lookups[1].db[1],raw+71+leveldiv5*6,6)
+	if value < 10 then
+		return value
+	end
+	return 10 + (value - 10) * 5
+end
+
+function RIO.max_dungeon(raw)
+	return RIO.ReadBitsFromString(RIO.lookups[1].db[1],raw+185,4)+1
+end
+
+function RIO.role_process(raw,pool)
+	local roles = RIO.ReadBitsFromString(RIO.lookups[1].db[1],raw,7)
 	local lw, hw = RIO.Split64BitNumber(RIO.decode[5][floor(roles/6)+1])
 	local rl = RIO.ReadBits(lw,hw,(roles%6)*9,9)
 	if pool then
@@ -250,53 +332,12 @@ end
 
 function RIO.role(raw,index,pool)
 	if index == 1 then
-		return RIO.role_process(raw[1],12,pool)
+		return RIO.role_process(raw+12,pool)
 	elseif index == 2 then
-		return RIO.role_process(raw[1],27,pool)
+		return RIO.role_process(raw+33,pool)
 	elseif index == 3 then
-		return RIO.role_process(raw[1],46,pool)
+		return RIO.role_process(raw+52,pool)
 	else
-		return RIO.role_process(raw[3],#RIO.dungeons*7-33,pool)
+		return RIO.role_process(raw+70,pool)
 	end
-end
-
-function RIO.dungeon(raw,index)
-	if index < 8 then
-		raw = raw[2]
-		index = 7 * index - 3
-	else
-		raw = raw[3]
-		index = 7 * index - 56
-	end
-	local lo, hi = RIO.Split64BitNumber(raw)
-	local read_bits = RIO.ReadBits
-	return read_bits(lo,hi,index,5),read_bits(lo,hi,index+5,2)
-end
-
-function RIO.keystone(raw,leveldiv5)
-	local b = leveldiv5 == 4 and 3 or 4
-	local bs
-	if leveldiv5 < 3 then
-		raw = raw[1]
-		bs = 15
-	else
-		raw = raw[3]
-		bs = 9
-	end
-	local lo, hi = RIO.Split64BitNumber(raw)
-	local dec = RIO.decode[b-1]
-	local pos = RIO.ReadBits(lo,hi,bs+leveldiv5*4,b)+1
-	if pos == #dec then
-		return dec[pos],true
-	end
-	local nx = dec[pos+1]
-	if nx == pos then
-		return dec[pos]
-	end
-	return dec[pos],nx
-end
-
-function RIO.max_dungeon(raw)
-	local lo, hi = RIO.Split64BitNumber(raw[2])
-	return 1+RIO.ReadBits(lo, hi, 0, 4)
 end
