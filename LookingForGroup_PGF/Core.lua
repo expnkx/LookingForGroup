@@ -114,7 +114,7 @@ LookingForGroup_Options.RegisterSimpleFilterExpensive("find",function(info,profi
 	env.cs = groupID == 252
 	env.tep = groupID == 254
 	env.tep = env.ete
-	env.nya = groupID = 258		-- Ny’alotha, the Waking City
+	env.nya = groupID == 258		-- Ny’alotha, the Waking City
 	env.ny   = env.nya
 
 	-- dungeons
