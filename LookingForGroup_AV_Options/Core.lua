@@ -28,10 +28,7 @@ local function do_search()
 		local activity_name = C_LFGList.GetActivityInfo(44)
 		LookingForGroup_Options.Search(
 		"lfg_opt_sr_default_multiselect",
-		nil,
-		do_search,
-		{"spam","av"},
-		3,nil,LE_LFG_LIST_FILTER_NOT_RECOMMENDED,0,nil,nil,nil,{"av"})
+		{"spam","av"},3,LE_LFG_LIST_FILTER_NOT_RECOMMENDED,0,{"av"})
 	end)()
 end
 local concat_tb = {}
