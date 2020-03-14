@@ -92,15 +92,18 @@ local function co_label(self)
 			local band = bit.band
 			if raw then
 				for i=1,RIO.score_types do
-					local score = RIO.score(raw,i)
+					local score,season = RIO.score(raw,i)
 					if score ~= 0 then
-						if band(i-1,1) ~= 0 then
-							concat[#concat+1] = "< "
+						if season then
+							concat[#concat+1] = "|cffffa500S["
+							concat[#concat+1] = season + 1
+							concat[#concat+1] = "]|r "
 						end
 						if band(i-1,2) ~= 0 then
 							concat[#concat+1] = "M "
 						end
-						concat[#concat+1] = RIO.score(raw,i)
+					
+						concat[#concat+1] = score
 						concat[#concat+1] = " "
 						LFG_RIO.role_concat(concat,raw,i,pool1)
 						concat[#concat+1] = "\n"
@@ -167,12 +170,18 @@ local function co_label(self)
 						end
 					end
 				end
-				concat[done_pos] = done
-				concat[#concat+1] = format("\n|cff0000ff{%.0f",raw[1])
-				for i=2,#raw do
-					concat[#concat+1] = format(",%.0f",raw[i])
+				concat[#concat+1] = format("\n|cff0000ff%.0f {",raw)
+				local rd8=raw/8
+				local luptb=RIO.lookups[1]
+				local lu = luptb.lookup[1]
+				for i=1,luptb.recordSizeInBytes do
+					if i ~= 1 then
+						concat[#concat+1] = ","
+					end
+					concat[#concat+1] = strbyte(lu,rd8)
 				end
 				concat[#concat+1] = "}|r\n"
+				concat[done_pos] = done
 			end
 			local raw = RIO.raw(2,name,server,pool)
 			if raw then

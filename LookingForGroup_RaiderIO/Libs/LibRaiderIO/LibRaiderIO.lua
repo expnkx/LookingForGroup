@@ -101,27 +101,25 @@ function RIO.raw(data,player,server,pool)
 	end
 --binary search : https://en.cppreference.com/w/cpp/algorithm/binary_search
 	if first~=last and server_info[first] <= player then
-		if bucket then
-			local lookup = RIO.lookups[data]
-			if data == 1 then	-- dungeon
-				return 1 + server_info[1] + (first - 2) * lookup.recordSizeInBytes
-			else	
-				if pool then
-					wipe(pool)
-				else
-					pool = {}
-				end		
-				local constant = 2
-				local pos = server_info[1]+(first-2) * constant
-				local lkp = RIO.lookups[data].lookup
-				local size = #lkp[1]
-				local b = lkp[math.floor(pos/size)+1]
-				local s = pos%size
-				for i=1,constant do
-					pool[i] = b[s+i]
-				end
-				return pool
+		local lookup = RIO.lookups[data]
+		if data == 1 then	-- dungeo
+			return (server_info[1] + (first - 2) * lookup.recordSizeInBytes )*8
+		else	
+			if pool then
+				wipe(pool)
+			else
+				pool = {}
+			end		
+			local constant = 2
+			local pos = server_info[1]+(first-2) * constant
+			local lkp = lookup.lookup
+			local size = #lkp[1]
+			local b = lkp[math.floor(pos/size)+1]
+			local s = pos%size
+			for i=1,constant do
+				pool[i] = b[s+i]
 			end
+			return pool
 		end
 	end
 end
@@ -253,12 +251,7 @@ function RIO.ReadBitsFromString(str, bitOffset, totalBitsToRead)
 		end
 		readOffset = readOffset + bitsRead
 	end
-
-	if readOffset ~= totalBitsToRead then
-		error('Read an improper number of bits. Expected ' .. totalBitsToRead .. ' got ' .. readOffset)
-	end
-
-	return value, bitOffset + readOffset
+	return value
 end
 
 --[[
@@ -275,7 +268,7 @@ end
 11  4 185       DUNGEON_BEST_INDEX          best dungeon index
 ]]
 function RIO.score(raw,index)
-	local str=RIO.lookups[1].db[1]
+	local str=RIO.lookups[1].lookup[1]
 	local read_bits_from_str = RIO.ReadBitsFromString
 	if index==1 then
 		return read_bits_from_str(str,raw,12)
@@ -289,10 +282,10 @@ function RIO.score(raw,index)
 end
 
 function RIO.dungeon(raw,index)
-	local base = 101+index*7 + raw		--101: DUNGEON_LEVELS
-	local str=RIO.lookups[1].db[1]
+	local base = 94+index*7 + raw		--101: DUNGEON_LEVELS
+	local str=RIO.lookups[1].lookup[1]
 	local read_bits_from_str = RIO.ReadBitsFromString
-	return read_bits_from_str(str,base,5),read_bits_from_str(str,base,2)
+	return read_bits_from_str(str,base,5),read_bits_from_str(str,base+5,2)
 end
 
 function RIO.DecodeBits6(value)
@@ -303,7 +296,7 @@ function RIO.DecodeBits6(value)
 end
 
 function RIO.keystone(raw,leveldiv5)
-	local value = RIO.ReadBitsFromString(RIO.lookups[1].db[1],raw+71+leveldiv5*6,6)
+	local value = RIO.ReadBitsFromString(RIO.lookups[1].lookup[1],raw+71+leveldiv5*6,6)
 	if value < 10 then
 		return value
 	end
@@ -311,12 +304,13 @@ function RIO.keystone(raw,leveldiv5)
 end
 
 function RIO.max_dungeon(raw)
-	return RIO.ReadBitsFromString(RIO.lookups[1].db[1],raw+185,4)+1
+	return RIO.ReadBitsFromString(RIO.lookups[1].lookup[1],raw+185,4)+1
 end
 
 function RIO.role_process(raw,pool)
-	local roles = RIO.ReadBitsFromString(RIO.lookups[1].db[1],raw,7)
+	local roles = RIO.ReadBitsFromString(RIO.lookups[1].lookup[1],raw,7)
 	local lw, hw = RIO.Split64BitNumber(RIO.decode[5][floor(roles/6)+1])
+
 	local rl = RIO.ReadBits(lw,hw,(roles%6)*9,9)
 	if pool then
 		wipe(pool)
