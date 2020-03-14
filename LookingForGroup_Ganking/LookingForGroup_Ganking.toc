@@ -1,0 +1,7 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: LookingForGroup Ganking
+## LoadOnDemand: 1
+## X-LFG-EVENT: 0
+
+Core.lua
