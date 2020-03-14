@@ -1,0 +1,8 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: LookingForGroup Cross Realm Enhancement
+## Dependencies: LookingForGroup_Options
+## X-LFG-OPT: 0
+## LoadOnDemand: 1
+
+Core.lua

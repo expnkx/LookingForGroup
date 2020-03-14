@@ -1,0 +1,22 @@
+------------------------------------------------------------------------
+r1230 | funkydude | 2020-01-14 17:01:25 +0000 (Tue, 14 Jan 2020) | 1 line
+Changed paths:
+   M /trunk/Ace3.toc
+
+bump toc
+------------------------------------------------------------------------
+r1229 | funkydude | 2019-10-11 20:48:50 +0000 (Fri, 11 Oct 2019) | 1 line
+Changed paths:
+   M /trunk/Ace3.toc
+
+bump toc
+------------------------------------------------------------------------
+r1228 | nevcairiel | 2019-09-06 08:51:17 +0000 (Fri, 06 Sep 2019) | 3 lines
+Changed paths:
+   M /trunk/AceGUI-3.0/AceGUI-3.0.lua
+
+AceGUI-3.0: Avoid re-entrance into the Release function
+
+This can happen if a frame is released in a callback fired in the release process, and may in some cases throw errors.
+------------------------------------------------------------------------
+

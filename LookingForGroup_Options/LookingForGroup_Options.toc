@@ -1,0 +1,15 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: LookingForGroup Options
+## SavedVariables: LookingForGroup_OptionsDB
+## LoadOnDemand: 1
+## X-LFG-MESSAGE: LFG_ChatCommand,LFG_ICON_LEFT_CLICK,LFG_UPDATE_EDITING
+## X-LFG-DISABLE-PVEFRAME-EVENT: AJ_PVE_LFG_ACTION,AJ_PVP_LFG_ACTION
+## Dependencies: LookingForGroup
+
+
+..\LookingForGroup_Settings\locale\locale.xml
+..\LookingForGroup_Settings\options_init.lua
+listing.lua
+module.xml
+Core.lua

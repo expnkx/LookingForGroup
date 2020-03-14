@@ -1,0 +1,10 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: LookingForGroup LFD/LFR
+## Dependencies: LookingForGroup_Options
+## LoadOnDemand: 1
+## X-LFG-OPT: 0
+## X-LFG-DISABLE-PVEFRAME-EVENT: AJ_DUNGEON_ACTION,LFG_OPEN_FROM_GOSSIP,AJ_RAID_ACTION
+## X-LFG-EM-HOSTER: LookingForGroup_Options
+
+Core.lua

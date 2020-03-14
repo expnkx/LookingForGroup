@@ -1,0 +1,11 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: LookingForGroup PVP
+## Dependencies: LookingForGroup_Options
+## LoadOnDemand: 1
+## X-LFG-OPT: 0
+## X-LFG-EVENT: AJ_PVP_ACTION,AJ_PVP_SKIRMISH_ACTION,AJ_PVP_RBG_ACTION
+## X-LFG-EM-HOSTER: LookingForGroup_Options
+## X-LFG-DISABLE-PVEFRAME: 0
+
+pvp.lua

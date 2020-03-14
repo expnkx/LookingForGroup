@@ -1,0 +1,11 @@
+package-as: LookingForGroup_RaiderIO
+
+externals:
+	Loader: https://bitbucket.org/ejsvifq_mabmip/libraiderio-loader
+	Libs/LibRaiderIO: https://bitbucket.org/ejsvifq_mabmip/libraiderio
+
+required-dependencies:
+	- LookingForGroup
+
+move-folders:
+	LookingForGroup_RaiderIO/Loader: LibRaiderIO_Loader

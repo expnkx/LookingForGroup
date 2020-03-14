@@ -1,0 +1,9 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: LookingForGroup Flags EU
+## Version: @project-version@
+## Dependencies: LookingForGroup_Options
+## LoadOnDemand: 1
+## X-LFG-OPT: 3
+
+Core.lua

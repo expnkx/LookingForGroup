@@ -1,0 +1,7 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: LookingForGroup Broker
+## Dependencies: LookingForGroup
+
+
+Core.lua

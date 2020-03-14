@@ -1,0 +1,7 @@
+## Interface: 80300
+## Author: cqwrteur
+## Title: LookingForGroup Cross Realm
+## LoadOnDemand: 1
+## X-LFG-MESSAGE: LFG_ICON_RIGHT_CLICK
+
+Core.lua
