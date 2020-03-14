@@ -59,6 +59,8 @@ LookingForGroup_Options.RegisterSimpleFilterExpensive("find",function(info,profi
 	env.friends = env.numBNetFriends + env.numCharFriends + env.numGuildMates
 	env.members = env.numMembers
 
+--	to support IsDeclinedGroup???
+
 --	env.bossesmatching = matching            fuck that we don't support shit like this. just use boss filter in LFG instead
 	env.maxplayers = maxPlayers
 	env.suggestedilvl = itemLevel
@@ -112,6 +114,8 @@ LookingForGroup_Options.RegisterSimpleFilterExpensive("find",function(info,profi
 	env.cs = groupID == 252
 	env.tep = groupID == 254
 	env.tep = env.ete
+	env.nya = groupID = 258		-- Ny’alotha, the Waking City
+	env.ny   = env.nya
 
 	-- dungeons
 	env.eoa  = groupID == 112  -- Eye of Azshara
@@ -140,12 +144,14 @@ LookingForGroup_Options.RegisterSimpleFilterExpensive("find",function(info,profi
 	env.td   = groupID == 144  -- Tol Dagor
 	env.wm   = groupID == 145  -- Waycrest Manor
 	env.sob  = groupID == 146  -- Siege of Boralus
-	env.opm  = groupID == 253
-	
+	env.opmj = groupID == 256  -- Operation: Mechagon - Junkyard
+	env.opmw = groupID == 257  -- Operation: Mechagon - Workshop
+	env.opm  = groupID == 253 or groupID == 256 or groupID == 257  -- Operation: Mechagon
+
 	env.ml = env.tml
 	env.undr = env.tur
 	env.siege = env.sob
-	
+
 	env.hasrio       = false
 	env.norio        = true
 	env.rio          = 0
