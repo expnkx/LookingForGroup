@@ -59,6 +59,8 @@
 			local sr = LookingForGroup_Options.option_table.args.search_result
 			if sr then
 				sr.args.search_again.func()
+			else
+				LookingForGroup_Options.find_search()
 			end
 		end
 	</Binding>

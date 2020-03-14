@@ -1,6 +1,7 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("LookingForGroup", "enUS", true)
 
-L["armor_desc"] = "Groups with at least 40% classes of your armor type"
+L["armor_desc"] = [=[Groups with at least 40% classes of your armor type
+]=]
 L["Armory"] = true
 L["Auto"] = true
 L["auto_disable_desc"] = "Disabling quests/invasion points/elites, etc. of all kinds of LFG auto groups from automatically popping up. You do not need to disable this since LFG will close static popup when you leave those areas."

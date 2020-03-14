@@ -3,5 +3,8 @@
 ## Title: LookingForGroup Hook
 ## Dependencies: LookingForGroup
 
+#@no-lib-strip@
+Libs\AceHook-3.0\AceHook-3.0.xml
+#@end-no-lib-strip@
 
 Core.lua

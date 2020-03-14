@@ -2,8 +2,10 @@ local L = LibStub("AceLocale-3.0"):NewLocale("LookingForGroup", "ruRU")
 if not L then return end
 --[[Translation missing --]]
 --[[ L["armor_desc"] = ""--]] 
-L["Armory"] = "Оружейная"
-L["Auto"] = "Авто"
+--[[Translation missing --]]
+--[[ L["Armory"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Auto"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["auto_disable_desc"] = ""--]] 
 --[[Translation missing --]]
@@ -12,21 +14,28 @@ L["Auto"] = "Авто"
 --[[ L["auto_no_info_quest"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["auto_no_info_quest_desc"] = ""--]] 
-L["auto_report"] = "Автоматический Отчет"
-L["auto_report_desc"] = "Автоматически сообщать о спам-группах в системе LFG"
+--[[Translation missing --]]
+--[[ L["auto_report"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["auto_report_desc"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["auto_wq_only_desc"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["Backfill"] = ""--]] 
-L["background_search"] = "Фоновый поиск"
+--[[Translation missing --]]
+--[[ L["background_search"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["bwlist_desc"] = ""--]] 
-L["cr_realm_rand_hop"] = "Случайный прыжок"
-L["cr_realm_rand_hop_desc"] = [=[Прыжок в случайный мир. Ctrl/Shift + ПКМ на иконку на мини-карте также делает это. 
-Макрос: /lfg cr rand_hop]=]
-L["cr_realm_scan"] = "Сканировать свой серевер"
-L["cr_realm_scan_desc"] = "Сканировать Ваш текущий сервер. Щелчок правой кнопкой мыши по значку у миникарты чтобы сканировать."
-L["Cross Realm"] = "Кросс-сервер"
+--[[Translation missing --]]
+--[[ L["cr_realm_rand_hop"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["cr_realm_rand_hop_desc"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["cr_realm_scan"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["cr_realm_scan_desc"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Cross Realm"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["digits_desc"] = ""--]] 
 --[[Translation missing --]]
@@ -37,19 +46,22 @@ L["Cross Realm"] = "Кросс-сервер"
 --[[ L["Fast"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["Fast_desc"] = ""--]] 
-L["find_f_advanced_class"] = "В группе доступна еще одна роль"
-L["find_f_advanced_complete"] = "Группа почти собрана"
-L["find_f_advanced_gold"] = "Поиск групп WTS/RMT"
-L["find_f_advanced_role"] = "Согласно вашей роли. Например, если вы целитель, вы не увидите группы подземелий с целителем в результатах поиска."
-L["find_f_encounters"] = [=[Нормальное нажатие = Этот босс должен быть побежден
-Темное нажатие = Этот босс не должен быть побежден
-Нет нажатия = Не волнует, побежден ли этот босс или нет.]=]
-L["find_recommended_desc"] = [=[Нормальное нажатие = Показать только рекомендуемые действия
-Темное нажатие = Показать другие действия
-Нет нажатия = Показать все действия]=]
+--[[Translation missing --]]
+--[[ L["find_f_advanced_class"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["find_f_advanced_complete"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["find_f_advanced_gold"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["find_f_advanced_role"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["find_f_encounters"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["find_recommended_desc"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["hyperlinks_desc"] = ""--]] 
-L["Keywords"] = "Ключевые слова"
+--[[Translation missing --]]
+--[[ L["Keywords"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["language_sf_desc"] = ""--]] 
 --[[Translation missing --]]
@@ -62,7 +74,8 @@ L["Keywords"] = "Ключевые слова"
 --[[ L["must_select_xxx"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["options_advanced_complete"] = ""--]] 
-L["options_advanced_hardware"] = "Запустите LFG в защищенном режиме. При необходимости автоматически включается."
+--[[Translation missing --]]
+--[[ L["options_advanced_hardware"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["options_advanced_mute"] = ""--]] 
 --[[Translation missing --]]
@@ -73,12 +86,14 @@ L["options_advanced_hardware"] = "Запустите LFG в защищенном
 --[[ L["options_auto_start_desc"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["options_sort_shuffle_desc"] = ""--]] 
-L["options_window"] = "Размер окна"
+--[[Translation missing --]]
+--[[ L["options_window"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["rand_rare"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["rand_rare_desc"] = ""--]] 
-L["Relist"] = "Повторно выставленный"
+--[[Translation missing --]]
+--[[ L["Relist"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["sf_add_desc"] = ""--]] 
 --[[Translation missing --]]

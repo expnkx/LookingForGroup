@@ -329,7 +329,7 @@ function LookingForGroup_Options.Search(dialog_control,filter_options,
 				end
 				none_format_concat[#none_format_concat+1] = #results
 				none_format_concat[#none_format_concat+1] = (#results ~= count and count) or nil
-				none_format_concat[#none_format_concat+1] = string.format("%.3fs",GetTime()-elapse_time_start)
+				none_format_concat[#none_format_concat+1] = string.format("%gs",GetTime()-elapse_time_start)
 				search_info.name=table.concat(none_format_concat,"/")
 				args.results = search_info
 				option_table_args.search_result = search_config_tb

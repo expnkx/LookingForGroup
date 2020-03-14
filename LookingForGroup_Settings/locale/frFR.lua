@@ -2,8 +2,10 @@ local L = LibStub("AceLocale-3.0"):NewLocale("LookingForGroup", "frFR")
 if not L then return end
 --[[Translation missing --]]
 --[[ L["armor_desc"] = ""--]] 
-L["Armory"] = "Armurerie"
-L["Auto"] = true
+--[[Translation missing --]]
+--[[ L["Armory"] = ""--]] 
+--[[Translation missing --]]
+--[[ L["Auto"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["auto_disable_desc"] = ""--]] 
 --[[Translation missing --]]

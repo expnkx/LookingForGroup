@@ -1,9 +1,8 @@
 ## Interface: 80300
 ## Author: cqwrteur
 ## Title: LookingForGroup
-## Version: 3037
+## Version: 3038
 ## SavedVariables: LookingForGroupDB
 ## OptionalDeps: Ace3
-
 
 Init.lua

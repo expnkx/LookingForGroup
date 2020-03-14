@@ -3,5 +3,8 @@
 ## Title: LookingForGroup Broker
 ## Dependencies: LookingForGroup
 
+#@no-lib-strip@
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+#@end-no-lib-strip@
 
 Core.lua

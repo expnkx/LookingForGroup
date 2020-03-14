@@ -1,9 +1,11 @@
 ## Interface: 80300
 ## Author: cqwrteur
 ## Title: LookingForGroup Icon
-## Version: 3033
 ## SavedVariablesPerCharacter: LookingForGroup_IconCharacterDB
 ## Dependencies: LookingForGroup_Broker
 
+#@no-lib-strip@
+Libs\LibDBIcon-1.0\lib.xml
+#@end-no-lib-strip@
 
 Core.lua

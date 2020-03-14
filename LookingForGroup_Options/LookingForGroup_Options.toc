@@ -7,7 +7,6 @@
 ## X-LFG-DISABLE-PVEFRAME-EVENT: AJ_PVE_LFG_ACTION,AJ_PVP_LFG_ACTION
 ## Dependencies: LookingForGroup
 
-
 ..\LookingForGroup_Settings\locale\locale.xml
 ..\LookingForGroup_Settings\options_init.lua
 listing.lua
