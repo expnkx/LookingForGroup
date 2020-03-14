@@ -174,11 +174,11 @@ local function co_label(self)
 				concat[#concat+1] = format("\n%s\n|cff0000ff%.0f {",luptb.date,raw)
 				local rd8=raw/8
 				local lu = luptb.lookup[1]
-				for i=1,luptb.recordSizeInBytes do
-					if i ~= 1 then
+				for i=0,luptb.recordSizeInBytes-1 do
+					if i ~= 0 then
 						concat[#concat+1] = ","
 					end
-					concat[#concat+1] = strbyte(lu,rd8)
+					concat[#concat+1] = strbyte(lu,rd8+i)
 				end
 				concat[#concat+1] = "}|r\n"
 				concat[done_pos] = done
