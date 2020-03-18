@@ -1,0 +1,9 @@
+## Interface: 80205
+## Author: cqwrteur
+## Title: LookingForGroup Flags US
+## Version: @project-version@
+## Dependencies: LookingForGroup_Options
+## LoadOnDemand: 1
+## X-LFG-OPT: 1
+
+Core.lua
