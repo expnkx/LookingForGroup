@@ -5,16 +5,14 @@ function Hook:OnInitialize()
 	self:SecureHook("QuestObjectiveSetupBlockButton_FindGroup")
 	self:SecureHook("QuestObjectiveReleaseBlockButton_FindGroup")
 	local disable_pve_frame = LookingForGroup.disable_pve_frame 
+	self:RawHook("QueueStatusDropDown_AddLFGListButtons",true)
+	self:RawHook("QueueStatusEntry_SetUpLFGListApplication",true)
+	self:RawHook("QueueStatusEntry_SetUpLFGListActiveEntry",true)
+	self:RawHook("LFGListUtil_OpenBestWindow",true)
 	if disable_pve_frame then
-		self:RawHook("QueueStatusDropDown_AddLFGListButtons",true)
-		self:RawHook("QueueStatusEntry_SetUpLFGListApplication",true)
-		self:RawHook("QueueStatusEntry_SetUpLFGListActiveEntry",true)
-		self:RawHook("LFGListUtil_OpenBestWindow",true)
---[[
 		self:RawHook("PVEFrame_ShowFrame",function(frame)
 			LookingForGroup:SendMessage("LFG_ICON_LEFT_CLICK")
 		end,true)			-- lol. RawHook is correct while SecureHook is wrong here!
-]]
 	else
 		local EntryCreation = LFGListFrame.EntryCreation
 		local original_description_ontextchanged = EntryCreation.Description.EditBox:GetScript("OnTextChanged")
