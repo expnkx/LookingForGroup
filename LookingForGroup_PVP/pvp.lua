@@ -1,23 +1,48 @@
 local LFG_OPT = LibStub("AceAddon-3.0"):GetAddon("LookingForGroup_Options")
 
-local function factory(Type,framename,func)
-	local AceGUI = LibStub("AceGUI-3.0")
+local AceGUI = LibStub("AceGUI-3.0")
+
+local function factory(Type,framename,func,challenges)
 	AceGUI:RegisterWidgetType(Type,function()
 		if _G[framename] == nil then
-			LoadAddOn("Blizzard_PVPUI")
+			LoadAddOn(challenges and "Blizzard_ChallengesUI" or "Blizzard_PVPUI")
 		end
 		local frame = _G[framename]
-		frame:SetScript("OnHide",nop)
+		if challenges then
+			hooksecurefunc("ChallengesFrame_Update",function(...)
+				LFG_OPT:SendMessage("LFG_HOOK_CHALLENGESFRAME_UPDATE",...)
+			end)
+		else
+			frame:SetScript("OnHide",function()
+				local HonorInset = PVPQueueFrame.HonorInset
+				HonorInset:SetParent(frame)
+				HonorInset:Hide()
+			end)
+			frame:HookScript("OnShow",function(self)
+				local HonorInset = PVPQueueFrame.HonorInset
 
-		local ConquestBar = frame.ConquestBar
-		ConquestBar:SetPoint("TOPRIGHT",-32,-19)
-		ConquestBar.Border:SetPoint("RIGHT",9,-2)
-		
+				HonorInset:SetParent(UIParent)
+				HonorInset:ClearAllPoints()
+				local value = 185
+				HonorInset:SetPoint("TOPRIGHT",self,"TOPRIGHT",value,-25)
+				HonorInset:SetPoint("BOTTOMRIGHT",self,"BOTTOMRIGHT",value,-25)
+				PVPQueueFrame.selection = self
+				if self==ConquestFrame then
+					HonorInset:DisplayRatedPanel()
+				else
+					HonorInset:DisplayCasualPanel()
+				end
+				HonorInset:Show()
+			end)			
+			local ConquestBar = frame.ConquestBar
+			ConquestBar:SetPoint("TOPRIGHT",-32,-19)
+			ConquestBar.Border:SetPoint("RIGHT",9,-2)
+		end
 		local widget = {
 			alignoffset = frame:GetHeight(),
 			frame       = frame,
 			type        = Type,
-			OnAcquire		= func(frame) or nop,
+			OnAcquire = func(frame) or nop,
 			SetLabel = nop,
 			SetList = nop,
 			SetValue = nop,
@@ -65,6 +90,17 @@ factory("LFG_OPT_CONQUEST","ConquestFrame",function(frame)
 	set_relative(frame,{"Arena2v2","Arena3v3","RatedBG"})
 end)
 
+factory("LFG_OPT_CHALLENGES","ChallengesFrame",function(frame)
+	ChallengesFrameInset:Hide()
+	frame.Background:Hide()
+	local seasonbest = frame.WeeklyInfo.Child.SeasonBest
+	seasonbest:SetAlpha(0)
+	local DungeonIcons = frame.DungeonIcons
+	local icon = DungeonIcons[1]
+	icon:ClearAllPoints()
+	icon:SetPoint("TOP",ChallengesFrame,"BOTTOM",-275,-400)
+end,true)
+
 LFG_OPT:push("honor",{
 	name = PVP_TAB_HONOR,
 	type = "group",
@@ -76,7 +112,7 @@ LFG_OPT:push("honor",{
 			type = "select",
 			dialogControl="LFG_OPT_HONOR",
 			values = {},
-			width="full",
+			width="full"
 		},
 	}
 })
@@ -97,6 +133,23 @@ LFG_OPT:push("conquest",{
 	}
 })
 
+LFG_OPT:push("challenge",{
+	name = PLAYER_DIFFICULTY5,
+	desc = CHALLENGES,
+	type = "group",
+	args =
+	{
+		challenge =
+		{
+			name = nop,
+			type = "select",
+			dialogControl="LFG_OPT_CHALLENGES",
+			values = {},
+			width="full"
+		}
+	}
+})
+
 function LFG_OPT:AJ_PVP_ACTION()
 	self.aj_open_action("honor")
 end
@@ -107,3 +160,12 @@ LFG_OPT.AJ_PVP_RBG_ACTION = LFG_OPT.AJ_PVP_ACTION
 LFG_OPT:RegisterEvent("AJ_PVP_ACTION")
 LFG_OPT:RegisterEvent("AJ_PVP_SKIRMISH_ACTION")
 LFG_OPT:RegisterEvent("AJ_PVP_RBG_ACTION")
+
+function LFG_OPT:LFG_HOOK_CHALLENGESFRAME_UPDATE(event,frame,...)
+	local icon = frame.DungeonIcons[1]
+	icon:ClearAllPoints()
+	icon:SetPoint("TOPLEFT",frame,"BOTTOMLEFT",0,-400)
+	icon:SetParent(frame)
+end
+
+LFG_OPT:RegisterMessage("LFG_HOOK_CHALLENGESFRAME_UPDATE")
