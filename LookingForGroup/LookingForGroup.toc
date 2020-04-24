@@ -1,7 +1,7 @@
 ## Interface: 80300
 ## Author: cqwrteur
 ## Title: LookingForGroup
-## Version: 3052
+## Version: 3056
 ## SavedVariables: LookingForGroupDB
 ## OptionalDeps: Ace3
 
