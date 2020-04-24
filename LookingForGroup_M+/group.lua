@@ -129,7 +129,7 @@ LFG_OPT:push("m+",{
 				local best_kl = 10
 				local best_rw = C_MythicPlus.GetRewardLevelForDifficultyLevel(best_kl)
 				while best_kl < 31 do
-					local gg = C_MythicPlus.GetRewardLevelForDifficultyLevel(best_kl+3)
+					local gg = C_MythicPlus.GetRewardLevelForDifficultyLevel(best_kl+5)
 					if gg == best_rw then
 						break
 					end
