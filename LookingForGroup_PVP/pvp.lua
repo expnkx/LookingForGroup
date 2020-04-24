@@ -9,12 +9,9 @@ local function factory(Type,framename,func,challenges)
 		end
 		local frame = _G[framename]
 		if challenges then
-			local elvui = LibStub("AceAddon-3.0"):GetAddon("ElvUI",true)
-			if not elvui then
-				hooksecurefunc("ChallengesFrame_Update",function(...)
-					LFG_OPT:SendMessage("LFG_HOOK_CHALLENGESFRAME_UPDATE",...)
-				end)
-			end
+			hooksecurefunc("ChallengesFrame_Update",function(...)
+				LFG_OPT:SendMessage("LFG_HOOK_CHALLENGESFRAME_UPDATE",...)
+			end)
 		else
 			frame:SetScript("OnHide",function()
 				local HonorInset = PVPQueueFrame.HonorInset
@@ -96,8 +93,7 @@ end)
 factory("LFG_OPT_CHALLENGES","ChallengesFrame",function(frame)
 	ChallengesFrameInset:Hide()
 	frame.Background:Hide()
-	local seasonbest = frame.WeeklyInfo.Child.SeasonBest
-	seasonbest:SetAlpha(0)
+	frame.WeeklyInfo.Child.SeasonBest:SetAlpha(0)
 end,true)
 
 LFG_OPT:push("honor",{
@@ -132,6 +128,7 @@ LFG_OPT:push("conquest",{
 	}
 })
 
+if not IsAddOnLoaded("ElvUI") then
 LFG_OPT:push("challenge",{
 	name = PLAYER_DIFFICULTY5,
 	desc = CHALLENGES,
@@ -148,7 +145,7 @@ LFG_OPT:push("challenge",{
 		}
 	}
 })
-
+end
 function LFG_OPT:AJ_PVP_ACTION()
 	self.aj_open_action("honor")
 end
