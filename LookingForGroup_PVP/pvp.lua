@@ -95,10 +95,6 @@ factory("LFG_OPT_CHALLENGES","ChallengesFrame",function(frame)
 	frame.Background:Hide()
 	local seasonbest = frame.WeeklyInfo.Child.SeasonBest
 	seasonbest:SetAlpha(0)
-	local DungeonIcons = frame.DungeonIcons
-	local icon = DungeonIcons[1]
-	icon:ClearAllPoints()
-	icon:SetPoint("TOP",ChallengesFrame,"BOTTOM",-275,-400)
 end,true)
 
 LFG_OPT:push("honor",{
