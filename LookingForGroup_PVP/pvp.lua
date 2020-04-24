@@ -9,9 +9,12 @@ local function factory(Type,framename,func,challenges)
 		end
 		local frame = _G[framename]
 		if challenges then
-			hooksecurefunc("ChallengesFrame_Update",function(...)
-				LFG_OPT:SendMessage("LFG_HOOK_CHALLENGESFRAME_UPDATE",...)
-			end)
+			local elvui = LibStub("AceAddon-3.0"):GetAddon("ElvUI",true)
+			if not elvui then
+				hooksecurefunc("ChallengesFrame_Update",function(...)
+					LFG_OPT:SendMessage("LFG_HOOK_CHALLENGESFRAME_UPDATE",...)
+				end)
+			end
 		else
 			frame:SetScript("OnHide",function()
 				local HonorInset = PVPQueueFrame.HonorInset
