@@ -66,14 +66,15 @@ local function scan(state)
 		add_to_log_tb(destGUID,destName)
 		LookingForGroup.resume(current,2)
 	end)
-	SendWho(table.concat{"z-\"",GetRealZoneText(),"\""})
+	C_FriendList.SendWho(table.concat{"z-\"",GetRealZoneText(),"\""})
 	LookingForGroup_CR:RegisterEvent("WHO_LIST_UPDATE",function()
 		LookingForGroup.resume(current,1)
 	end)
 	local timer = C_Timer.NewTimer(20,function()
 		LookingForGroup.resume(current,0)
 	end)
-
+	local GetWhoInfo = C_FriendList.GetWhoInfo
+	local GetNumWhoResults = C_FriendList.GetNumWhoResults
 	local i = 1
 	while i<31 do
 		local yd = coroutine.yield()
