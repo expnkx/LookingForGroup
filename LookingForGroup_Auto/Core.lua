@@ -508,7 +508,7 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 			end
 		end
 		Auto:RegisterEvent("NAME_PLATE_UNIT_ADDED",event_func,18)
-		Auto:RegisterEvent("UNIT_HEALTH_FREQUENT",event_func,18)
+		Auto:RegisterEvent("UNIT_HEALTH",event_func,18)
 		Auto:RegisterEvent("UNIT_TARGET",event_func,17)
 	end
 	if keyword then
