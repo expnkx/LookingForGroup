@@ -41,6 +41,9 @@ local function update_armory_menu()
 		{
 			text = k,
 			func = function(_, id)
+				if id == nil then
+					return
+				end
 				local leaderName = C_LFGList.GetSearchResultInfo(id).leaderName
 				if leaderName then
 					local armory_link = v(leaderName)
@@ -129,6 +132,9 @@ local function GetSearchEntryMenu(resultID)
 			{
 				text = WHISPER_LEADER,
 				func = function(_, id)
+					if id == nil then
+						return
+					end	
 					applysearchresultinfo(id,"leaderName",ChatFrame_SendTell)
 				end,
 			}),

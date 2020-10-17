@@ -11,6 +11,9 @@ local function GetSearchEntryMenu(aid)
 			{
 				text = WHISPER,
 				func = function(_, id)
+					if id == nil then
+						return
+					end
 					local name = SocialQueueUtil_GetRelationshipInfo(select(7,C_SocialQueue.GetGroupInfo(id)))
 					if name then
 						ChatFrame_SendTell(name)
@@ -42,6 +45,9 @@ local function GetSearchEntryMenu(aid)
 		{
 			text = k,
 			func = function(_, id)
+				if id == nil then
+					return
+				end
 				local name = SocialQueueUtil_GetRelationshipInfo(select(7,C_SocialQueue.GetGroupInfo(id)))
 				if name then
 					LookingForGroup_Options.Paste(v(name),backqj)

@@ -13,13 +13,13 @@ function LookingForGroup_Q:OnInitialize()
 	[54453] = true, -- Paragon Order of Embers
 	[54456] = true, -- Paragon Order of Embers
 -- bfa assaults
-    [51982] = true, -- Storm's Rage
-    [53701] = true, -- A Drust Cause
-    [53711] = true, -- A Sound Defense
-    [53883] = true, -- Shores of Zuldazar
-    [53885] = true, -- Isolated Victory
-    [53939] = true, -- Breaching Boralus
-    [54132] = true, -- Horde of Heroes
+	[51982] = true, -- Storm's Rage
+	[53701] = true, -- A Drust Cause
+	[53711] = true, -- A Sound Defense
+	[53883] = true, -- Shores of Zuldazar
+	[53885] = true, -- Isolated Victory
+	[53939] = true, -- Breaching Boralus
+	[54132] = true, -- Horde of Heroes
 	[53414] = true,
 	[53416] = true, -- Warfront: The Battle for Stromgarde
 	[53992] = true, 
@@ -49,14 +49,14 @@ local function cofunc(quest_id,secure,gp)
 		if secure <= 0 and LookingForGroup.db.profile.auto_no_info_quest then
 			return
 		end
-		local GetQuestLogTitle = GetQuestLogTitle
-		for i=1,GetNumQuestLogEntries() do
-			local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isBounty, isStory, isHidden, isScaling = GetQuestLogTitle(i)
-			if questID == quest_id then
+		local GetInfo = C_QuestLog.GetInfo
+		for i=1,C_QuestLog.GetNumQuestLogEntries() do
+			local tb=GetInfo(i)
+			if GetInfo(i).questID == quest_id then
 				if secure <= 0 and frequency == LE_QUEST_FREQUENCY_WEEKLY then
 					return
 				end
-				questName = title
+				questName = tb.title
 				break
 			end
 		end
@@ -104,7 +104,11 @@ local function cofunc(quest_id,secure,gp)
 			LookingForGroup.popup:Hide()
 		end
 	end)
-	local raid = select(4,GetQuestTagInfo(quest_id)) == 3
+	local raid
+	local tb = C_QuestLog.GetQuestTagInfo(quest_id)
+	if tb then
+		raid = tb.quality == 2
+	end
 	if not gp and IsInGroup() then
 		if 0 < secure and UnitIsGroupLeader("player", LE_PARTY_CATEGORY_HOME) then
 			gp = true
@@ -172,7 +176,9 @@ local function is_group_q(id,ignore)
 	if profile.q[id] then
 		return
 	end
-	local tagID, tagName, wq_type, rarity, isElite, tradeskillLineIndex, displayTimeLeft = GetQuestTagInfo(id)
+	local quest_tb = C_QuestLog.GetQuestTagInfo(id)
+	local tagID = quest_tb.tagID
+	local wq_type = quest_tb.worldQuestType
 	if tagID == 62 or tagID == 81 or tagID == 83 or tagID == 117 or tagID == 124 or tagID == 125 then
 		return
 	end
@@ -192,10 +198,10 @@ local function is_group_q(id,ignore)
 	if quest_faction == 1090 or quest_faction == 2163 then
 		return
 	end
-	local num_wq_watches = GetNumWorldQuestWatches()
+	local num_wq_watches = C_QuestLog.GetNumWorldQuestWatches()
 	if num_wq_watches ~= 0 then
 		local i = 1
-		local GetWorldQuestWatchInfo = GetWorldQuestWatchInfo
+		local GetWorldQuestWatchInfo = C_QuestLog.GetWorldQuestWatchInfo
 		while i<=num_wq_watches do
 			if GetWorldQuestWatchInfo(i) == id then
 				break
@@ -209,7 +215,7 @@ local function is_group_q(id,ignore)
 	return true
 end
 
-function LookingForGroup_Q:QUEST_ACCEPTED(_,index,quest_id)
+function LookingForGroup_Q:QUEST_ACCEPTED(_,quest_id)
 	local load_time = LookingForGroup.load_time
 	if load_time == nil or GetTime() < load_time + 5 then
 		return

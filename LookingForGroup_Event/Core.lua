@@ -2,7 +2,6 @@ local LookingForGroup = LibStub("AceAddon-3.0"):GetAddon("LookingForGroup")
 local Event = LookingForGroup:NewModule("Event","AceEvent-3.0")
 
 function Event:OnEnable()
-	self:RegisterEvent("ADDON_ACTION_BLOCKED")
 	LFGListInviteDialog:UnregisterAllEvents()
 	self:RegisterEvent("PARTY_INVITE_REQUEST")
 	UIParent:UnregisterEvent("PARTY_INVITE_REQUEST")
@@ -72,16 +71,6 @@ end
 function Event:LFG_LIST_APPLICANT_UPDATED()
 	if InCombatLockdown() or ( select(2,C_LFGList.GetNumApplicants()) == 0 ) then
 		QueueStatusMinimapButton_SetGlowLock(QueueStatusMinimapButton, "lfglist-applicant", false)
-	end
-end
-
-function Event:ADDON_ACTION_BLOCKED(info,addon,method)
-	if addon:find("LookingForGroup") and (method == "Search()" or method == "resume()" or method == "UNKNOWN()") then
-		local profile = LookingForGroup.db.profile
-		if not profile.hardware then
-			profile.hardware = true
-			LookingForGroup:Print(MODE,HARDWARE)
-		end
 	end
 end
 
