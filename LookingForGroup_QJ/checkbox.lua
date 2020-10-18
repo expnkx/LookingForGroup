@@ -14,7 +14,7 @@ local function GetSearchEntryMenu(aid)
 					if id == nil then
 						return
 					end
-					local name = SocialQueueUtil_GetRelationshipInfo(select(7,C_SocialQueue.GetGroupInfo(id)))
+					local name = SocialQueueUtil_GetRelationshipInfo(select(8,C_SocialQueue.GetGroupInfo(id)))
 					if name then
 						ChatFrame_SendTell(name)
 					end
@@ -48,7 +48,7 @@ local function GetSearchEntryMenu(aid)
 				if id == nil then
 					return
 				end
-				local name = SocialQueueUtil_GetRelationshipInfo(select(7,C_SocialQueue.GetGroupInfo(id)))
+				local name = SocialQueueUtil_GetRelationshipInfo(select(8,C_SocialQueue.GetGroupInfo(id)))
 				if name then
 					LookingForGroup_Options.Paste(v(name),backqj)
 				end
