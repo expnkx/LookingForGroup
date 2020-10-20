@@ -1,6 +1,6 @@
 local LookingForGroup = LibStub("AceAddon-3.0"):GetAddon("LookingForGroup")
 local LookingForGroup_AV = LibStub("AceAddon-3.0"):GetAddon("LookingForGroup_AV")
-local InviteUnit = InviteUnit
+local InviteUnit = C_PartyInfo.InviteUnit
 local LookingForGroup_AV_SendCommand = LookingForGroup_AV.SendCommand
 local GetNumGroupMembers = GetNumGroupMembers
 local UnitName = UnitName

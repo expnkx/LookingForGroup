@@ -279,7 +279,7 @@ function LookingForGroup_Options.ExecuteAutoAccept(bts,tb,results,filter_options
 				if hardware then
 					if info.numMembers == 1 then
 						local name = C_LFGList.GetApplicantMemberInfo(info.applicantID,1)
-						InviteUnit(name)
+						C_PartyInfo.InviteUnit(name)
 					end
 				else
 					C_LFGList.InviteApplicant(info.applicantID)

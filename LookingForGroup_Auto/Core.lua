@@ -647,7 +647,7 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 							end
 						end
 						if not full() then
-							InviteUnit(name)
+							C_PartyInfo.InviteUnit(name)
 							invited_tb[name] = GetTime()
 						end
 					end
@@ -700,7 +700,7 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 		elseif k == "CHAT_MSG_WHISPER" then
 			if not full() and gpl == ty_pe and (not player_list[arg3] or player_list[arg3] + 30 < GetTime() ) then
 				player_list[arg3] = GetTime()
-				InviteUnit(arg3)
+				C_PartyInfo.InviteUnit(arg3)
 			end
 		elseif k == "CHAT_MSG_SYSTEM" then
 			local uname = string.match(gpl,string.gsub(ERR_DECLINE_GROUP_S,"%%s","(.*)"))
@@ -775,7 +775,7 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 				if not full() then
 					local app = C_LFGList.GetApplicants()
 					local C_LFGList_GetApplicantInfo = C_LFGList.GetApplicantInfo
-					local InviteUnit = InviteUnit
+					local InviteUnit = C_PartyInfo.InviteUnit
 					local C_LFGList_GetApplicantMemberInfo = C_LFGList.GetApplicantMemberInfo
 					local InviteApplicant = C_LFGList.InviteApplicant
 					local hardware = profile.hardware
