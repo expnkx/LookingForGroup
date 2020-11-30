@@ -204,9 +204,9 @@ local function is_group_q(id,ignore)
 	local num_wq_watches = C_QuestLog.GetNumWorldQuestWatches()
 	if num_wq_watches ~= 0 then
 		local i = 1
-		local GetWorldQuestWatchInfo = C_QuestLog.GetWorldQuestWatchInfo
+		local GetQuestIDForWorldQuestWatchIndex = C_QuestLog.GetQuestIDForWorldQuestWatchIndex
 		while i<=num_wq_watches do
-			if GetWorldQuestWatchInfo(i) == id then
+			if GetQuestIDForWorldQuestWatchIndex(i) == id then
 				break
 			end
 			i = i + 1
