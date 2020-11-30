@@ -177,6 +177,9 @@ local function is_group_q(id,ignore)
 		return
 	end
 	local quest_tb = C_QuestLog.GetQuestTagInfo(id)
+	if quest_tb == nil then
+		return
+	end
 	local tagID = quest_tb.tagID
 	local wq_type = quest_tb.worldQuestType
 	if tagID == 62 or tagID == 81 or tagID == 83 or tagID == 117 or tagID == 124 or tagID == 125 then
