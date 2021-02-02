@@ -400,9 +400,9 @@ function LookingForGroup.accepted(name,search,create,secure,raid,keyword,ty_pe,c
 								if level == 0 then
 									require_pause = true
 									break
-								elseif level == 120 and UnitHealthMax(unit) < 25000 or level < 60 and select(3,UnitClass(unit)) == 6 then
-									is_spam_group = true
-									break
+--								elseif level == 120 and UnitHealthMax(unit) < 25000 or level < 60 and select(3,UnitClass(unit)) == 6 then
+--									is_spam_group = true
+--									break
 								end
 							end
 							if require_pause then

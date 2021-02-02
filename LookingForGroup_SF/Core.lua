@@ -142,7 +142,7 @@ local function cofunc()
 		end
 		if tag == 1 then
 			if guid and guid:find("^Player") then
-				if (IsGuildMember(guid) or IsCharacterFriend(guid) or UnitInRaid(player) or UnitInParty(player) or C_BattleNet.GetGameAccountInfoByGUID(player)) then
+				if (IsGuildMember(guid) or C_FriendList.IsFriend(guid) or UnitInRaid(player) or UnitInParty(player) or C_BattleNet.GetGameAccountInfoByGUID(player)) then
 					break
 				end
 			end
