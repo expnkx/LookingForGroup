@@ -4,16 +4,14 @@ local options = cnbnpoints:NewModule("options","AceEvent-3.0")
 
 local mapIDs =
 {
-244,  -- Atal'Dazar
-245,  -- Freehold
-249,  -- Kings' Rest
-252,  -- Shrine of the Storm
-353,  -- Siege of Boralus
-250,  -- Temple of Sethraliss
-247,  -- The MOTHERLODE
-251,  -- The Underrot
-246,  -- Tol Dagor
-248,  -- Waycrest Manor
+375,	-- Mists of Tirna Scithe
+376,	-- The Necrotic Wake
+377,	-- De Other Side
+378,	-- Halls of Atonement
+379,	-- Plaguefall
+380,	-- Sanguine Depths
+381,	-- Spires of Ascension
+382,	-- Theater of Pain
 }
 
 local generated_mp

@@ -15,17 +15,19 @@ function LookingForGroup_Options.listing(activity,s,filters,back_list,provider,.
 			return
 		end
 	end
+	local C_LFGList = C_LFGList
 	local listing
 	provider = provider or C_LFGList
-	if C_LFGList.HasActiveEntryInfo() then
-		local actv = C_LFGList.GetActiveEntryInfo().activityID
+	local HasActiveEntryInfo = provider.HasActiveEntryInfo or C_LFGList.HasActiveEntryInfo
+	local GetActiveEntryInfo = provider.GetActiveEntryInfo or C_LFGList.GetActiveEntryInfo
+	if HasActiveEntryInfo() then
+		local actv = GetActiveEntryInfo().activityID
 		activity = actv
 		listing = provider.UpdateListing
 		if quest_id == nil and LFGListFrame.EntryCreation.Name:GetText()=="" then
 			expected(LFG_LIST_MUST_HAVE_NAME)
 			return
 		end
-		LookingForGroup_Options:SendMessage("LFG_LIST_OR_UPDATE")
 	else
 		listing = provider.CreateListing
 		if quest_id == nil and LFGListFrame.EntryCreation.Name:GetText()=="" then
@@ -34,6 +36,7 @@ function LookingForGroup_Options.listing(activity,s,filters,back_list,provider,.
 		end
 	end
 	if listing(activity,s.minimum_item_level or 0,s.minimum_honor_level or 0,s.auto_accept or false,s.private or false,quest_id) then
+		LookingForGroup_Options:SendMessage("LFG_LIST_OR_UPDATE")
 		if not active then
 			coroutine.wrap(LookingForGroup_Options.req_main)(s.auto_accept,filters,back_list,provider,...)
 		end
