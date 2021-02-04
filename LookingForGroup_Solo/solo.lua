@@ -15,7 +15,7 @@ LookingForGroup_Options:push("solo",
 			func = function()
 				if not IsInGroup() then
 					if LFGListFrame.EntryCreation.Name:GetText() ~= "" then
-						C_LFGList.CreateListing(457,GetAverageItemLevel()-3,0,false,true)
+						C_LFGList.CreateListing(457,0,0,false,true)
 						coroutine.wrap(LookingForGroup_Options.req_main)(1)
 					else
 						LookingForGroup_Options.expected(format(L.solo_hint,LFG_LIST_TITLE,START_A_GROUP))
@@ -39,7 +39,7 @@ LookingForGroup_Options:push("solo",
 					end
 				elseif IsInInstance() and not IsInGroup() then
 					if LFGListFrame.EntryCreation.Name:GetText() ~= "" then
-						C_LFGList.CreateListing(457,GetAverageItemLevel()-3,0,false,true)
+						C_LFGList.CreateListing(457,0,0,false,true)
 						coroutine.wrap(LookingForGroup_Options.req_main)(1)
 						C_Timer.After(1,C_PartyInfo.LeaveParty)
 					else
