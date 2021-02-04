@@ -5,16 +5,14 @@ local function keystone_information(detailed)
 	if not mapid then return end
 	local maps_to_group_id =
 	{
-		[244] = 137,  -- Atal'Dazar
-		[245] = 142,  -- Freehold
-		[249] = 141,  -- Kings' Rest
-		[252] = 143,  -- Shrine of the Storm
-		[353] = 146,  -- Siege of Boralus
-		[250] = 139,  -- Temple of Sethraliss
-		[247] = 140,  -- The MOTHERLODE
-		[251] = 138,  -- The Underrot
-		[246] = 144,  -- Tol Dagor
-		[248] = 145  -- Waycrest Manor
+		[375] = 262,	-- Mists of Tirna Scithe
+		[376] = 265,	-- The Necrotic Wake
+		[377] = 260,	-- De Other Side
+		[378] = 261,	-- Halls of Atonement
+		[379] = 259,	-- Plaguefall
+		[380] = 263,	-- Sanguine Depths
+		[381] = 264,	-- Spires of Ascension
+		[382] = 266,	-- Theater of Pain
 	}
 	local groupid = maps_to_group_id[mapid]
 	if not groupid then return end
