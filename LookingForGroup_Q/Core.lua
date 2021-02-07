@@ -161,9 +161,6 @@ local function is_group_q(id,ignore)
 	if ignore then
 		return true
 	end
-	if GetQuestLogRewardMoney(id) == 23400 then
-		return
-	end
 	if (46794 <= id and id <= 46802) -- legion paragon quests
 		or (50598<=id and id <= 50606) -- bfa bounty quests
 		or (51021<=id and id <= 51051) or (52375<=id and id <= 52388) -- bfa supplies needed
@@ -191,7 +188,9 @@ local function is_group_q(id,ignore)
 	if profile.auto_ccqg and not C_LFGList.CanCreateQuestGroup(id) then
 		return
 	end
-	if wq_type == LE_QUEST_TAG_TYPE_PET_BATTLE or wq_type == LE_QUEST_TAG_TYPE_PROFESSION or wq_type == LE_QUEST_TAG_TYPE_DUNGEON or wq_type == LE_QUEST_TAG_TYPE_RAID then
+	local QuestTagType = Enum.QuestTagType
+	if wq_type == QuestTagType.PetBattle or wq_type == QuestTagType.Profession or wq_type == QuestTagType.Dungeon or
+		wq_type == QuestTagType.Islands or wq_type == QuestTagType.Raid or wq_type == QuestTagType.RatedReward then
 		return
 	end
 	if math.floor(id/100) == 413 then
