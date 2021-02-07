@@ -347,10 +347,12 @@ function LookingForGroup.accepted(name,search,create,secure,raid,keyword,ty_pe,c
 				yd = coroutine.yield()
 				if yd == 3 then
 					local applications = C_LFGList.GetApplications()
+					local GetApplicationInfo = C_LFGList.GetApplicationInfo
+					local CancelApplication = C_LFGList.CancelApplication
 					for i = 1,#applications do
-						local groupID, status = C_LFGList.GetApplicationInfo(applications[i])
+						local groupID, status = GetApplicationInfo(applications[i])
 						if status == "applied" and 0 <= delta then
-							C_LFGList.CancelApplication(groupID)
+							CancelApplication(groupID)
 						end
 					end
 				elseif yd == "PARTY_INVITE_REQUEST" then
@@ -533,16 +535,14 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 	if not IsInGroup() and not C_LFGList.HasActiveEntryInfo() then
 		tolist = true
 	end
-	local function full()
+	local invited_applicants_tb = {}
+	local function remain_group_spaces()
 		if not C_LFGList.HasActiveEntryInfo() and not LFGListUtil_IsEntryEmpowered() then
-			return true
+			return 0
 		end
 		local q = C_LFGList.CanActiveEntryUseAutoAccept() or raid
 		local n = GetNumGroupMembers()
-		local tn = n+C_LFGList.GetNumInvitedApplicantMembers()
-		if not keyword then
-			tn = tn + C_LFGList.GetNumPendingApplicantMembers()
-		end
+		local counter = n+C_LFGList.GetNumInvitedApplicantMembers()
 		local maxn = q and 40 or 4
 		if q then
 			maxn = 40
@@ -551,11 +551,10 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 		else
 			maxn = 5
 		end
-		if maxn <= tn then
-			return true
+		if maxn <= counter then
+			return 0
 		end
 		local gtime = GetTime()
-		local counter = tn
 		local type = type
 		for k,v in pairs(invited_tb) do
 			if type(v)=="number" then
@@ -564,11 +563,24 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 				else
 					counter = counter + 1
 					if maxn <= counter then
-						return true
+						return 0
 					end
 				end
 			end
-		end	
+		end
+		local C_LFGList_GetApplicantInfo = C_LFGList.GetApplicantInfo
+		for k,v in pairs(invited_applicants_tb) do
+			local info = C_LFGList_GetApplicantInfo(k)
+			if info == nil then
+				invited_applicants_tb[k] = nil
+			elseif info.applicationStatus == "applied" and info.isNew then
+				counter = counter + info.numMembers
+			end
+		end
+		if maxn <= counter then
+			return 0
+		end
+		return maxn-counter
 	end
 	local show_popup = LookingForGroup.show_popup
 	local not_hide_popup
@@ -630,6 +642,7 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 				local n = GetNumGroupMembers()
 				local tn = n+C_LFGList.GetNumInvitedApplicantMembers() 
 				local maxn = q and 40 or 4
+				local InviteUnit = C_PartyInfo.InviteUnit
 				if tn < maxn  then
 					local name,server = UnitName(arg3)
 					if name and server then
@@ -646,8 +659,8 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 								invited_tb[uname] = true
 							end
 						end
-						if not full() then
-							C_PartyInfo.InviteUnit(name)
+						if remain_group_spaces() ~= 0 then
+							InviteUnit(name)
 							invited_tb[name] = GetTime()
 						end
 					end
@@ -698,7 +711,7 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 				initialize_kicker()
 			end
 		elseif k == "CHAT_MSG_WHISPER" then
-			if not full() and gpl == ty_pe and (not player_list[arg3] or player_list[arg3] + 30 < GetTime() ) then
+			if remain_group_spaces()~=0 and gpl == ty_pe and (not player_list[arg3] or player_list[arg3] + 30 < GetTime() ) then
 				player_list[arg3] = GetTime()
 				C_PartyInfo.InviteUnit(arg3)
 			end
@@ -716,7 +729,7 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 			local firstInvite = GetNextPendingInviteConfirmation()
 			if firstInvite then
 				local confirmationType, name, guid, rolesInvalid, willConvertToRaid = GetInviteConfirmationInfo(firstInvite)
-				if not full() and confirmationType == LE_INVITE_CONFIRMATION_REQUEST and invited_tb[name] == true then
+				if remain_group_spaces()~=0 and confirmationType == LE_INVITE_CONFIRMATION_REQUEST and invited_tb[name] == true then
 					RespondToInviteConfirmation(firstInvite, true)
 				else
 					RespondToInviteConfirmation(firstInvite, false)
@@ -772,21 +785,44 @@ function LookingForGroup.autoloop(name,create,raid,keyword,ty_pe,in_range,compos
 				if ( C_LFGList.CanActiveEntryUseAutoAccept() or raid) and not profile.auto_convert_to_raid then
 					C_PartyInfo.ConvertToRaid()
 				end
-				if not full() then
+				local group_spaces = remain_group_spaces()
+				if group_spaces ~= 0 then
 					local app = C_LFGList.GetApplicants()
 					local C_LFGList_GetApplicantInfo = C_LFGList.GetApplicantInfo
-					local InviteUnit = C_PartyInfo.InviteUnit
-					local C_LFGList_GetApplicantMemberInfo = C_LFGList.GetApplicantMemberInfo
-					local InviteApplicant = C_LFGList.InviteApplicant
 					local hardware = profile.hardware
-					for i=1,#app do
-						local info = C_LFGList_GetApplicantInfo(app[i])
-						if info.applicationStatus == "applied" and info.isNew then
-							if hardware then
-								local name = C_LFGList_GetApplicantMemberInfo(info.applicantID,1)
-								InviteUnit(name)
-							else
-								InviteApplicant(info.applicantID)
+					local invited_num_this_round = 0
+					if hardware then
+						local C_LFGList_GetApplicantMemberInfo = C_LFGList.GetApplicantMemberInfo
+						local InviteUnit = C_PartyInfo.InviteUnit
+						for i=1,#app do
+							local applicantID = app[i]
+							if invited_applicants_tb[applicantID] == nil then
+								local info = C_LFGList_GetApplicantInfo(applicantID)
+								if info.numMembers == 1 and info.applicationStatus == "applied" and info.isNew then
+									local name = C_LFGList_GetApplicantMemberInfo(applicantID,1)
+									InviteUnit(name)
+									invited_applicants_tb[applicantID] = GetTime()
+									invited_num_this_round = invited_num_this_round + 1
+									if invited_num_this_round == group_spaces then
+										break
+									end
+								end
+							end
+						end
+					else
+						local InviteApplicant = C_LFGList.InviteApplicant
+						for i=1,#app do
+							local applicantID = app[i]
+							local info = C_LFGList_GetApplicantInfo(applicantID)
+							local numMembers = info.numMembers
+							if numMembers + invited_num_this_round <= group_spaces then
+								if info.applicationStatus == "applied" and info.isNew then
+									InviteApplicant(applicantID)
+									invited_num_this_round = invited_num_this_round + numMembers
+									if group_spaces <= invited_num_this_round then
+										break
+									end
+								end
 							end
 						end
 					end

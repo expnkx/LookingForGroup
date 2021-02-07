@@ -1,7 +1,7 @@
 ## Interface: 90002
 ## Author: cqwrteur
 ## Title: LookingForGroup
-## Version: 3090
+## Version: 3092
 ## SavedVariables: LookingForGroupDB
 ## OptionalDeps: Ace3
 
