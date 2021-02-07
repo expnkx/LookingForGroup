@@ -19,7 +19,6 @@ function LookingForGroup_Options.req_main(auto_accept,filters,back_list,invite_p
 			LookingForGroup_Options:RegisterEvent("LFG_LIST_ACTIVE_ENTRY_UPDATE")
 			return
 		end
-		LookingForGroup_Options:SendMessage("LFG_LIST_OR_UPDATE")
 	end
 	filters = filters or {"s","f"}
 	local app_tb = {}
